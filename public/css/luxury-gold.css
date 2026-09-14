@@ -763,3 +763,135 @@ hr.luxury-divider {
     margin: 30px 0;
     opacity: 0.8;
 }
+
+/* Responsive Video & Embeds */
+.luxury-card-body iframe,
+.note-editable iframe,
+.luxury-card-body video,
+.note-editable video {
+    max-width: 100% !important;
+    aspect-ratio: 16 / 9;
+    height: auto !important;
+    border-radius: 8px;
+}
+
+/* Summernote Luxury Modal & Dialogs */
+.note-modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10400 !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(4px);
+}
+
+.note-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 10500 !important;
+    display: none;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    pointer-events: auto !important;
+}
+
+.note-modal.open {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.note-modal-content {
+    background: #141924 !important;
+    border: 1.5px solid var(--gold-border-bright) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.3) !important;
+    color: #ffffff !important;
+    overflow: hidden;
+    position: relative !important;
+    z-index: 10600 !important;
+    max-width: 540px !important;
+    width: 90% !important;
+    margin: auto !important;
+    pointer-events: auto !important;
+}
+
+.note-modal-header {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+    padding: 16px 24px !important;
+}
+
+.note-modal-header .close,
+.note-modal-header .note-close {
+    color: #ffd700 !important;
+    opacity: 0.85;
+    font-size: 1.6rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.note-modal-header .close:hover,
+.note-modal-header .note-close:hover {
+    opacity: 1;
+    color: #ffffff !important;
+}
+
+.note-modal-title {
+    color: #ffd700 !important;
+    font-weight: 700 !important;
+    font-size: 1.15rem;
+}
+
+.note-modal-body {
+    padding: 24px !important;
+}
+
+.note-modal-body label {
+    color: #fadb7f !important;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.note-modal-body small {
+    color: #8fa0b5 !important;
+}
+
+.note-modal-footer {
+    border-top: 1px solid rgba(212, 175, 55, 0.2) !important;
+    padding: 16px 24px !important;
+    height: auto !important;
+    display: flex;
+    justify-content: flex-end;
+    background: #10141d;
+}
+
+.note-video-url,
+input.note-video-url {
+    background-color: #0c1017 !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+    border-radius: var(--radius-md) !important;
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    padding: 12px 16px !important;
+    width: 100% !important;
+}
+
+.note-video-url:focus {
+    border-color: #ffd700 !important;
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.4) !important;
+    outline: none !important;
+}
+
+.note-video-btn {
+    min-width: 140px;
+}
+
+

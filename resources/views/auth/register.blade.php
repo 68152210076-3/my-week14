@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'สมัครสมาชิก - WORAMAN Luxury')
+@section('title', 'สมัครสมาชิก - WORAMAN888')
 
 @section('content')
 <div class="row justify-content-center py-4">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'บทความทั้งหมด - WORAMAN Luxury')
+@section('title', 'บทความทั้งหมด - WORAMAN888')
 
 @section('content')
 <div class="py-2">
@@ -57,7 +57,22 @@
                                         <i class="bi bi-file-earmark-text text-gold me-2"></i>{{ $item->title }}
                                     </div>
                                     <div class="table-blog-snippet" style="max-width: 480px;">
-                                        {{ Str::limit($item->content, 85, '...') }}
+                                        @php
+                                            $cleanSnippet = trim(strip_tags($item->content));
+                                        @endphp
+                                        @if ($cleanSnippet)
+                                            {{ Str::limit($cleanSnippet, 85, '...') }}
+                                        @elseif (str_contains($item->content, '<iframe') || str_contains($item->content, '<video'))
+                                            <span class="badge bg-transparent border border-warning text-gold" style="font-size: 0.75rem;">
+                                                <i class="bi bi-play-circle me-1"></i> มีวิดีโอแนบ
+                                            </span>
+                                        @elseif (str_contains($item->content, '<img'))
+                                            <span class="badge bg-transparent border border-warning text-gold" style="font-size: 0.75rem;">
+                                                <i class="bi bi-image me-1"></i> มีรูปภาพแนบ
+                                            </span>
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
                                     </div>
                                 </td>
 

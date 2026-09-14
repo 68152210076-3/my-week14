@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Zenith Lab') | WORAMAN Luxury Portal</title>
+    <title>@yield('title', 'หน้าแรก') | WORAMAN888</title>
 
     <!-- Google Fonts & Bootstrap Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <i class="bi bi-gem crown-icon"></i>
-                    <span class="gold-gradient-text">WORAMAN</span>
+                    <span class="gold-gradient-text">WORAMAN888</span>
                     <span class="badge bg-transparent border border-warning text-gold ms-1" style="font-size: 0.65rem; letter-spacing: 0.1em; border-color: rgba(212,175,55,0.4) !important;">LUXE</span>
                 </a>
 
@@ -134,7 +134,7 @@
                     <div class="text-md-start">
                         <div class="footer-brand">
                             <i class="bi bi-gem me-1" style="color: var(--gold-400);"></i>
-                            <span class="gold-gradient-text">WORAMAN LUXURY</span>
+                            <span class="gold-gradient-text">WORAMAN888</span>
                         </div>
                         <p class="small text-muted mb-0">ระบบจัดการบทความระดับพรีเมียม สไตล์ Modern Luxury Gold</p>
                     </div>
@@ -146,5 +146,109 @@
             </div>
         </footer>
     </div>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Summernote Lite (CSS & JS CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+    <!-- Summernote Initialization -->
+    <script>
+        $(document).ready(function() {
+            var $editor = $('#content');
+            if (!$editor.length) return;
+
+            $editor.summernote({
+                placeholder: 'เขียนเนื้อหาบทความที่นี่...',
+                tabsize: 2,
+                height: 250,
+                dialogsInBody: true,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                callbacks: {
+                    onPaste: function (e) {
+                        var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                        // ถ้าผู้ใช้ Paste โค้ด iframe หรือ video ให้แทรกเป็น HTML ทันที
+                        if (bufferText && (bufferText.trim().startsWith('<iframe') || bufferText.trim().startsWith('<video'))) {
+                            e.preventDefault();
+                            $editor.summernote('pasteHTML', bufferText.trim());
+                            return;
+                        }
+                        e.preventDefault();
+                        document.execCommand('insertText', false, bufferText);
+                    },
+                    onDialogShown: function () {
+                        setTimeout(function() {
+                            var $videoInput = $('.note-video-url');
+                            $videoInput.attr('placeholder', 'วางลิงก์ YouTube ที่นี่... (เช่น https://youtu.be/...)');
+                            $videoInput.focus();
+                            $videoInput.on('input paste keyup change', function() {
+                                setTimeout(function() {
+                                    var val = $videoInput.val().trim();
+                                    $('.note-video-btn').prop('disabled', val.length === 0).toggleClass('disabled', val.length === 0);
+                                }, 50);
+                            });
+                        }, 100);
+                    }
+                }
+            });
+
+            // ปรับปรุงระบบ Video ให้รองรับ YouTube ลิงก์ทุกรูปแบบ, Shorts, Embed และไฟล์วิดีโอ
+            var context = $editor.data('summernote');
+            if (context && context.modules && context.modules.videoDialog) {
+                var originalCreateVideoNode = context.modules.videoDialog.createVideoNode;
+
+                context.modules.videoDialog.createVideoNode = function(url) {
+                    url = (url || '').trim();
+
+                    // 1. รองรับโค้ด Embed <iframe> หรือ <video> ที่นำมาวางในช่อง Video URL
+                    if (url.indexOf('<iframe') !== -1 || url.indexOf('<video') !== -1) {
+                        var $node = $(url);
+                        if ($node.length) {
+                            $node.css('max-width', '100%');
+                            return $node[0];
+                        }
+                    }
+
+                    // 2. รองรับ YouTube ทุกรูปแบบ (youtu.be, watch?v=, shorts, embed, มี ?si= หรือพารามิเตอร์อื่นๆ)
+                    var ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/i);
+                    if (ytMatch && ytMatch[1]) {
+                        var videoId = ytMatch[1];
+                        var timeMatch = url.match(/[?&]t=(\d+)/);
+                        var start = timeMatch ? timeMatch[1] : null;
+                        var embedUrl = 'https://www.youtube.com/embed/' + videoId + (start ? '?start=' + start : '');
+
+                        return $('<iframe>')
+                            .attr('frameborder', 0)
+                            .attr('src', embedUrl)
+                            .attr('width', '640')
+                            .attr('height', '360')
+                            .attr('allowfullscreen', 'allowfullscreen')
+                            .css({
+                                'max-width': '100%',
+                                'border-radius': '8px'
+                            })[0];
+                    }
+
+                    // 3. รองรับลิงก์ไฟล์วิดีโอโดยตรง (.mp4, .webm, .ogg)
+                    if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)) {
+                        return $('<video controls style="max-width: 100%; height: auto; border-radius: 8px;"><source src="' + url + '"></video>')[0];
+                    }
+
+                    // 4. กรณีอื่นๆ ส่งต่อไปยังฟังก์ชันดั้งเดิมของ Summernote (เช่น Vimeo, Dailymotion)
+                    return originalCreateVideoNode.call(this, url);
+                };
+            }
+        });
+    </script>
 </body>
 </html>
